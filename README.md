@@ -1,7 +1,7 @@
 
 
 <h1 align="center">
-# SearchGit
+# SearchGithub
 </h1>
 
 <h4 align="center">
