@@ -16,30 +16,53 @@ class App {
         this.formElement.onsubmit = event => this.addRepository(event)
     }
 
+    setLoading(loading = true) {
+        if (loading === true) {
+            let brElement = document.createElement('br')
+            let loadingElement = document.createElement('span')
+            loadingElement.appendChild(brElement)
+            loadingElement.appendChild(document.createTextNode(" Loading... "))
+            loadingElement.setAttribute('id', 'loading')
+
+            this.formElement.appendChild(loadingElement)
+        } else {
+            document.getElementById('loading').remove()
+        }
+
+    }
+
     async addRepository(event) {
         event.preventDefault()
+
+        this.setLoading()
 
         const repositoryImput = this.inputElement.value
 
         if (repositoryImput.length === 0)
             return
 
-        const response = await api.get(`/users/${repositoryImput}`)
+        try {
+            const response = await api.get(`/users/${repositoryImput}`)
 
-        const { name, repos_url, html_url, avatar_url, public_repos, followers, following, location } = response.data
+            const { name, repos_url, html_url, avatar_url, public_repos, followers, following, location } = response.data
 
-        this.repositories.push({
-            name,
-            repos_url,
-            avatar_url,
-            html_url,
-            public_repos,
-            followers,
-            following,
-            location,
-        })
+            this.repositories.push({
+                name,
+                repos_url,
+                avatar_url,
+                html_url,
+                public_repos,
+                followers,
+                following,
+                location,
+            })
 
-        this.render()
+            this.render()
+        } catch (err) {
+            alert('The user does not exist.')
+        }
+        this.setLoading(false)
+
     }
 
     render() {
