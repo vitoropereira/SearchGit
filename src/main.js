@@ -26,13 +26,17 @@ class App {
 
         const response = await api.get(`/users/${repositoryImput}`)
 
-        const { name, description, html_url, avatar_url } = response.data
+        const { name, repos_url, html_url, avatar_url, public_repos, followers, following, location } = response.data
 
         this.repositories.push({
             name,
-            description,
+            repos_url,
             avatar_url,
             html_url,
+            public_repos,
+            followers,
+            following,
+            location,
         })
 
         this.render()
@@ -46,21 +50,33 @@ class App {
             imgElement.setAttribute('src', repository.avatar_url)
 
             let titleElement = document.createElement('strong')
-            titleElement.appendChild(document.createTextNode(repository.name))
+            titleElement.appendChild(document.createTextNode(repository.name + " "))
 
-            let descriptionElement = document.createElement('p')
-            descriptionElement.appendChild(document.createTextNode(repository.description))
+            let public_reposElement = document.createElement('p')
+            public_reposElement.appendChild(document.createTextNode('Public Repository - ' + repository.public_repos))
+
+            let followersElement = document.createElement('p')
+            followersElement.appendChild(document.createTextNode('Followers - ' + repository.followers))
+
+            let followingElement = document.createElement('p')
+            followingElement.appendChild(document.createTextNode('Folowing - ' + repository.following))
+
+            let locationElement = document.createElement('p')
+            locationElement.appendChild(document.createTextNode('Localidade - ' + repository.location))
 
             let linkElement = document.createElement('a')
+            linkElement.setAttribute('href', repository.html_url)
             linkElement.setAttribute('target', '_blank')
-            linkElement.setAttribute('src', repository.html_url)
-            linkElement.appendChild(document.createTextNode('Acessar'))
+            linkElement.appendChild(document.createTextNode('View Profile'))
 
             let listLiElement = document.createElement('li')
             listLiElement.appendChild(imgElement)
             listLiElement.appendChild(titleElement)
-            listLiElement.appendChild(descriptionElement)
             listLiElement.appendChild(linkElement)
+            listLiElement.appendChild(public_reposElement)
+            listLiElement.appendChild(followersElement)
+            listLiElement.appendChild(followingElement)
+            listLiElement.appendChild(locationElement)
 
             this.listElement.appendChild(listLiElement)
 
